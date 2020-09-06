@@ -1,0 +1,190 @@
+﻿@model TaskMaster.Models.ViewModels.IssueVM
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var title = "Create Issue";
+}
+
+<form method="post">
+    <div class="row p-3 border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @if (Model.Issue.Id != 0)
+        {
+            //edit
+            title = "Edit Issue";
+            <input type="hidden" asp-for="Issue.Id" />
+        }
+        <div class="col-12 border-bottom">
+            <h2 class="text-primary">@title</h2>
+        </div>
+        <div class="col-8 pt-4">
+
+            <div class="form-group row">
+                <div class="col-4">
+                    Carpark
+                </div>
+                <div class="col-8">
+                    @Html.DropDownListFor(m => m.CarparkID, Model.CarparkList, "Select Carpark",
+                   new { @class = "form-control" })
+                    <span asp-validation-for="Issue.CarparkID" class="text-danger"> </span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    Gantry
+                </div>
+                <div class="col-8">
+
+                    @if (Model.Issue.CarparkID != 0)
+                    {
+
+                        @Html.DropDownListFor(m => m.Issue.GantryID, Model.GantryList, "Select Gantry",
+                        new { @class = "form-control" })
+                    }
+                    @if (Model.Issue.CarparkID == 0)
+                    {
+                        @Html.DropDownListFor(m => m.GantryID, new SelectList(""), "Select Gantry", new { @class = "form-control" })
+                    }
+
+                    <span asp-validation-for="Issue.GantryID" class="text-danger"> </span>
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    Category
+                </div>
+                <div class="col-8">
+                    @Html.DropDownListFor(m => m.Issue.CategoryID, Model.CategoryList, "Select Category",
+                   new { @class = "form-control" })
+                    <span asp-validation-for="Issue.CategoryID" class="text-danger"> </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Issue.Reportedby"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Issue.Reportedby" class="form-control" />
+                    <span asp-validation-for="Issue.Reportedby" class="text-danger"> </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Issue.Description"></label>
+                </div>
+                <div class="col-8">
+                    <textarea asp-for="Issue.Description" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Issue.Action"></label>
+                </div>
+                <div class="col-8">
+                    <textarea asp-for="Issue.Action" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Issue.ServiceRptno"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Issue.ServiceRptno" class="form-control" />
+                    <span asp-validation-for="Issue.ServiceRptno" class="text-danger"> </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Issue.Issuestatus"></label>
+                </div>
+                <div class="col-8">
+                    @Html.DropDownListFor(n => n.Issue.Issuestatus,
+                     new SelectList(Enum.GetValues(typeof(Issue.StatusList))),
+                     "Select status",
+                     new { @class = "form-control" })
+                    <span asp-validation-for="Issue.Issuestatus" class="text-danger"> </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-8 offset-4">
+                    @if (Model.Issue.Id != 0)
+                    {
+                        <partial name="_EditAndBackToListButton" model="Model.Issue.Id" />
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" onclick="return validateInput()" class="btn btn-primary form-control">Create</button>
+                                @*<button type="submit" class="btn btn-primary form-control">Create</button>*@
+                            </div>
+                            <div class="col">
+                                <a asp-action="Index" class="btn btn-success form-control">Back to List</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.tiny.cloud/1/jmo53fm3j93pcwt2urxcbo3m2f95pmhrxsnni7ia1p3v9fa3/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        $(document).ready(function () {
+            $('#CarparkID').change(function () {
+                var carparkid = $(this).val();
+                $.ajax({
+                    type: "Post",
+                    url: "/Admin/Issue/GetGantryList?CarparkID=" + carparkid,
+                    contentType: "html",
+                    success: function (response) {
+                        $("#GantryID").empty();
+                        $("#GantryID").append(response);
+                    }
+                });
+            });
+        });
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'lists',
+            menubar: 'file edit format'
+        });
+
+
+        //function validateInput() {
+        //    if (document.getElementById("uploadBox").value == "") {
+        //        swal("Error", "Please select an image", "error");
+        //        return false;
+        //    }
+        //    return true;
+    </script>
+}
+
+@*<partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.tiny.cloud/1/jmo53fm3j93pcwt2urxcbo3m2f95pmhrxsnni7ia1p3v9fa3/tinymce/5/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'lists',
+            menubar: 'file edit format'
+        });
+
+
+        function validateInput() {
+            if (document.getElementById("uploadBox").value == "") {
+                swal("Error", "Please select an image", "error");
+                return false;
+            }
+            return true;
+        };*@
+
+
+
+@*</script>*@
+@*}*@
+

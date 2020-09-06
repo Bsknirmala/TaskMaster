@@ -1,0 +1,8 @@
+﻿<option value=""> --Select Gantry --</option>
+@if (ViewBag.GantryOptions != null)
+{
+    foreach (var item in ViewBag.GantryOptions)
+    {
+        <option value="@item.Value">@item.Text</option>
+    }
+}

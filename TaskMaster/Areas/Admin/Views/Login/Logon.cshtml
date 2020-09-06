@@ -1,0 +1,99 @@
+﻿@model TaskMaster.Models.User
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var title = "User Login";
+}
+
+<form method="post">
+    <div class="row p-3 border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @if (Model.Id != 0)
+        {
+            //edit
+            title = "User Login";
+        }
+        <div class="col-12 border-bottom">
+            <h2 class="text-primary">@title</h2>
+        </div>
+        <div class="col-8 pt-4">
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Name"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"> </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Password"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"> </span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-8 offset-4">
+                    @if (Model.Id != 0)
+                    {
+                        <partial name="_EditAndBackToListButton" model="Model.Id" />
+                    }
+                    else
+                    {
+                        <partial name="_LoginAndCancelButton" />
+                    }
+                </div>
+            </div>
+            @*<div class="form-group">
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                </div>*@
+            @*<div class="form-group row">
+                    <div class="col-md-offset-2 col-md-2">
+                        <label class="label-success">@ViewBag.SuccessMessage</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-offset-2 col-md-2">
+                        <label class="label-danger">@ViewBag.DuplicateMessage</label>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script>
+          function Validate() {
+            $.ajax(
+            {
+              type: "POST",
+              url: '@Url.Action("Validate", "Login")',
+              data: {
+                  Name: $('#name').val(),
+                  Password: $('#password').val()
+              },
+                    error: function (result) {
+                toastr.error(message, "There is a Problem, Try Again!");
+                //alert("There is a Problem, Try Again!");
+              },
+              success: function (result) {
+                console.log(result);
+                if (result.status == true) {
+                  window.location.href = '@Url.Action("Index", "Home")';
+                }
+                else {
+                  //alert(result.message);
+                    toastr.error(message, result.message);
+                }
+              }
+            });
+          }
+    </script>
+}
+

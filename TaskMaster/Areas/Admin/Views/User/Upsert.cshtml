@@ -1,0 +1,143 @@
+﻿@model TaskMaster.Models.ViewModels.UserVM
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var title = "Create User";
+}
+
+<form method="post">
+    <div class="row p-3 border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @if (Model.User.Id != 0)
+        {
+            //edit
+            title = "Edit User";
+            <input type="hidden" asp-for="User.Id" />
+        }
+        <div class="col-12 border-bottom">
+            <h2 class="text-primary">@title</h2>
+        </div>
+        <div class="col-8 pt-4">
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="User.Name"></label>
+                </div>
+                <div class="col-8">
+                    @if (Model.User.Id == 0)
+                    {
+                        <input asp-for="User.Name" class="form-control"  autofocus/>
+                    }
+                    else
+                    {
+                        <input asp-for="User.Name" class="form-control" readonly="readonly" />
+                    }
+                    <span asp-validation-for="User.Name" class="text-danger"> </span>
+                 </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="User.Password" ></label>
+                </div>
+                <div class="col-8">
+                    @if (Model.User.Id == 0)
+                    {
+                        <input asp-for="User.Password" class="form-control" />
+                    }
+                    else
+                    {
+                        <input asp-for="User.Password" class="form-control" autofocus />
+                    }
+                    <span asp-validation-for="User.Password" class="text-danger"> </span>
+                 </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="ConfirmPassword"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"> </span>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="User.AccessLevel"></label>
+                </div>
+                <div class="col-8">
+                    @Html.DropDownListFor(n => n.User.AccessLevel,
+                     new SelectList(Enum.GetValues(typeof(User.AccessList))),
+                     "Select AccessLevel",
+                     new { @class = "form-control" })
+                    <span asp-validation-for="User.AccessLevel" class="text-danger"> </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="User.Dept"></label>
+                </div>
+                <div class="col-8">
+                    @Html.DropDownListFor(n => n.User.Dept,
+                     new SelectList(Enum.GetValues(typeof(User.DeptList))),
+                     "Select Department",
+                     new { @class = "form-control" })
+                    <span asp-validation-for="User.Dept" class="text-danger"> </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-8 offset-4">
+                    @if (Model.User.Id != 0)
+                    {
+                        <partial name="_EditAndBackToListButton" model="Model.User.Id" />
+                    }
+                    else
+                    {
+                        <partial name="_CreateAndBackToListButton" />
+                    }
+                </div>
+            </div>
+            @*<div class="form-group row">
+                <div class="col-md-offset-2 col-md-2">
+                    <label class="label-success">@ViewBag.SuccessMessage</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-offset-2 col-md-2">
+                    <label class="label-danger">@ViewBag.DuplicateMessage</label>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <!--<script>
+        //$(document).ready(function () {
+        //    $('#ConfirmPassword').change(function () {
+        //        var ConfirmPassword = $(this).val();
+        //        var password = $('#Password').val();
+        //        if (ConfirmPassword != password)
+        //           {
+        //            toastr.error("Password mismatch!")
+        //           }
+
+        //    });
+        //});-->
+        @*$(function () {
+
+            var title = '@ViewBag.Title';
+            var message = '@ViewBag.Message';
+            if (message != "") {
+                toastr.error(message, title);
+            }
+        });*@
+        @*$("#Create").click(function(){
+            var title = '@ViewBag.Title';
+            var message = '@ViewBag.Message';
+            toastr.info(message, title);
+        });*@
+    <!--</script>-->
+}
+
