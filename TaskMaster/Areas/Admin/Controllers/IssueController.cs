@@ -52,11 +52,7 @@ namespace TaskMaster.Areas.Admin.Controllers
                         Text = i.Description,
                         Value = i.Id.ToString()
                     }),
-                    //GantryList = _unitOfWork.Gantry.GetAll().Select(i => new SelectListItem
-                    //{
-                    //    Text = i.Description,
-                    //    Value = i.Id.ToString()
-                    //}),
+
                     CategoryList = _unitOfWork.Hardwaretype.GetAll().Select(i => new SelectListItem
                     {
                         Text = i.Description,
@@ -77,6 +73,7 @@ namespace TaskMaster.Areas.Admin.Controllers
                 }
                 issuesVM.CarparkID = issuesVM.Issue.CarparkID;
                 issuesVM.GantryID = issuesVM.Issue.GantryID;
+                issuesVM.CategoryID = issuesVM.Issue.CategoryID;
                 var parameter = new DynamicParameters();
                 parameter.Add("@CarparkID", issuesVM.CarparkID);
 
@@ -86,9 +83,6 @@ namespace TaskMaster.Areas.Admin.Controllers
                     Value = i.Id.ToString()
                 });
 
-                //return View();
-                //ViewBag.GantryOptions = issuesVM.GantryList;
-                //return PartialView("_GantryOptionPartial");
                 return View(issuesVM);
             }
             else
@@ -127,14 +121,21 @@ namespace TaskMaster.Areas.Admin.Controllers
                 {
                     issuesVM.Issue.CarparkID = issuesVM.CarparkID;
                     issuesVM.Issue.GantryID = issuesVM.GantryID;
+                    issuesVM.Issue.Loginuser = HttpContext.Session.GetString("Username");
                     //issuesVM.Issue.CategoryID= issuesVM.CategoryID;
                     _unitOfWork.Issue.Add(issuesVM.Issue);
                 }
                 else
                 {
                     issuesVM.Issue.CarparkID = issuesVM.CarparkID;
-                    //issuesVM.Issue.GantryID = issuesVM.GantryID;
-                    _unitOfWork.Issue.Update(issuesVM.Issue);
+                    var objFromDb = _unitOfWork.Issue.Get(issuesVM.Issue.Id);
+                    if (objFromDb != null)
+                        //issuesVM.Issue.Loginuser = HttpContext.Session.GetString("Username");
+                        //issuesVM.Issue.GantryID = issuesVM.GantryID;
+                        issuesVM.Issue.Loginuser = objFromDb.Loginuser;
+                        issuesVM.Issue.Reportedby = objFromDb.Reportedby;
+                        issuesVM.Issue.Issuedt = objFromDb.Issuedt;
+                        _unitOfWork.Issue.Update(issuesVM.Issue);
                 }
                 _unitOfWork.Save();
                 return RedirectToAction(nameof(Index));
@@ -158,7 +159,22 @@ namespace TaskMaster.Areas.Admin.Controllers
                 });
                 if (issuesVM.Issue.Id != 0)
                 {
+
                     issuesVM.Issue = _unitOfWork.Issue.Get((int)issuesVM.Issue.Id);
+                }
+                else
+                {
+                    //issuesVM.CarparkID = issuesVM.Issue.CarparkID;
+                    //issuesVM.GantryID = issuesVM.Issue.GantryID;
+                    var parameter = new DynamicParameters();
+                    parameter.Add("@CarparkID", issuesVM.CarparkID);
+                    issuesVM.GantryList = _unitOfWork.SP_Call.List<Gantry>(SD.Proc_Gantrydetails_by_carpark, parameter).Select(i => new SelectListItem
+                    {
+                        Text = i.Description,
+                        Value = i.Id.ToString()
+                    });
+                    issuesVM.GantryID = issuesVM.GantryID;
+                    issuesVM.CategoryID = issuesVM.Issue.CategoryID;
                 }
             }
             return View(issuesVM);

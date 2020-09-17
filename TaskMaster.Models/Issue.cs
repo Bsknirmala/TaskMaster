@@ -11,23 +11,32 @@ namespace TaskMaster.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public string Description { get; set; }
+        //[Required(AllowEmptyStrings = false, ErrorMessage = "Please enter Description")]
+
+        //[MinLength(5)]
+        //[MaxLength(1024)]
+
+        [DataType(DataType.MultilineText)]
+        public string Description { get; set; } 
+
         [Required]
         public string  Reportedby { get; set; }
-        
-        [DisplayFormat(ApplyFormatInEditMode =true,DataFormatString ="0:yyyy-MM-dd HH:mm:ss}")]
-        [Required]
-        public DateTime Issuedt { get; set; }
-        [Required]
         public string Action { get; set; }
 
         public string ServiceRptno { get; set; }
+
         [Required]
         public string Issuestatus { get; set; }
+         public string Loginuser { get; set; }
 
+        //[DisplayFormat(ApplyFormatInEditMode =true,DataFormatString ="0:yyyy-MM-dd HH:mm:ss}")]
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime Issuedt { get; set; }
+     
         public DateTime ts { get; set; }
         public DateTime df { get; set; }
+        
         public Issue()
         {
             Issuedt = DateTime.Now;

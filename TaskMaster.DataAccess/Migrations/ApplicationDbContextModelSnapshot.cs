@@ -305,7 +305,6 @@ namespace TaskMaster.DataAccess.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Action")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CarparkID")
@@ -326,6 +325,9 @@ namespace TaskMaster.DataAccess.Migrations
 
                     b.Property<string>("Issuestatus")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Loginuser")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Reportedby")

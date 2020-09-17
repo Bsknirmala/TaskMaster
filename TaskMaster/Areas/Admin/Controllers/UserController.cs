@@ -60,37 +60,42 @@ namespace TaskMaster.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var parameter = new DynamicParameters();
-                parameter.Add("@Name", userVM.User.Name);
-                var objFromDb = _unitOfWork.SP_Call.OneRecord<User>(SD.Proc_Logindetail_by_name, parameter);
-                if (objFromDb != null)
-                {
-                     if (userVM.ConfirmPassword == userVM.User.Password)
+                
+                    if (userVM.ConfirmPassword == userVM.User.Password)
                     {
                         if (userVM.User.Id == 0)
                         {
-                            _unitOfWork.User.Add(userVM.User);
+                            var parameter = new DynamicParameters();
+                            parameter.Add("@Name", userVM.User.Name);
+                            var objFromDb = _unitOfWork.SP_Call.OneRecord<User>(SD.Proc_Logindetail_by_name, parameter);
+                            if (objFromDb == null)
+                            {
+                                _unitOfWork.User.Add(userVM.User);
+                            }
 
+                            else
+                            {
+                                ModelState.AddModelError("", "User already exists!");
+                                return View(userVM);
+                            }
                         }
                         else
                         {
                             _unitOfWork.User.Update(userVM.User);
                         }
                         _unitOfWork.Save();
-                        //ViewBag.SuccessMessage = "Registration successful";
                         ViewBag.Message = "Registration successful";
 
                         return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        //ViewBag.SuccessMessage = "Password mismatch.Recheck";
-                        ModelState.AddModelError("", "Passwords do not match");
-                        return View(userVM.User);
+                        ModelState.AddModelError("", "Passwords do not match!");
+                        return View(userVM);
                     }
-                }
+
             }
-            return View(userVM.User);
+            return View(userVM);
         }
 
         #region API CALLS

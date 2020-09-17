@@ -11,7 +11,6 @@ namespace TaskMaster.Models
         [Key]
         public int Id { get; set; }
 
-        [Display(Description = "Gantry Description")]
         [Required]
         [MaxLength(200)]
         public string Description { get; set; }

@@ -4,7 +4,7 @@
     var title = "Create Issue";
 }
 
-<form method="post">
+<form method="post" name="myform" id="myform">
     <div class="row p-3 border">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         @if (Model.Issue.Id != 0)
@@ -16,24 +16,22 @@
         <div class="col-12 border-bottom">
             <h2 class="text-primary">@title</h2>
         </div>
-        <div class="col-8 pt-4">
+        <div class="col-12 pt-4">
 
             <div class="form-group row">
-                <div class="col-4">
+                <div class="col-2">
                     Carpark
                 </div>
-                <div class="col-8">
+                <div class="col-4">
                     @Html.DropDownListFor(m => m.CarparkID, Model.CarparkList, "Select Carpark",
                    new { @class = "form-control" })
-                    <span asp-validation-for="Issue.CarparkID" class="text-danger"> </span>
+                    @*<span asp-validation-for="Issue.CarparkID" class="text-danger"> </span>*@
+                    <span id="cpkmessage" class="text-danger"></span>
                 </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-4">
+                <div class="col-2">
                     Gantry
                 </div>
-                <div class="col-8">
+                <div class="col-4">
 
                     @if (Model.Issue.CarparkID != 0)
                     {
@@ -46,69 +44,71 @@
                         @Html.DropDownListFor(m => m.GantryID, new SelectList(""), "Select Gantry", new { @class = "form-control" })
                     }
 
-                    <span asp-validation-for="Issue.GantryID" class="text-danger"> </span>
+                    @*<span asp-validation-for="Issue.GantryID" class="text-danger"> </span>*@
+                    <span id="gantrymessage" class="text-danger"></span>
 
                 </div>
             </div>
 
             <div class="form-group row">
-                <div class="col-4">
+                <div class="col-2">
                     Category
                 </div>
-                <div class="col-8">
+                <div class="col-4">
                     @Html.DropDownListFor(m => m.Issue.CategoryID, Model.CategoryList, "Select Category",
                    new { @class = "form-control" })
                     <span asp-validation-for="Issue.CategoryID" class="text-danger"> </span>
                 </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-4">
+                <div class="col-2">
                     <label asp-for="Issue.Reportedby"></label>
                 </div>
-                <div class="col-8">
-                    <input asp-for="Issue.Reportedby" class="form-control" />
+                <div class="col-4">
+                    <input asp-for="Issue.Reportedby" class="form-control" id="reportedby" />
                     <span asp-validation-for="Issue.Reportedby" class="text-danger"> </span>
                 </div>
             </div>
+
             <div class="form-group row">
-                <div class="col-4">
+                <div class="col-2">
                     <label asp-for="Issue.Description"></label>
                 </div>
-                <div class="col-8">
-                    <textarea asp-for="Issue.Description" class="form-control"></textarea>
+                <div class="col-10">
+                    <textarea asp-for="Issue.Description" class="form-control" id="description">  </textarea>
+                    @*<span asp-validation-for="Issue.Description" class="text-danger"> </span>*@
+                    <span id="message" class="text-danger"></span>
+                    @*@Html.TextAreaFor(m => m.Issue.Description, new { @class = "k-textbox", maxlength = "2000", @rows = "5" cols = "100" })
+                        @Html.ValidationMessageFor(m => m.Issue.Description)*@
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col-4">
+                <div class="col-2">
                     <label asp-for="Issue.Action"></label>
                 </div>
-                <div class="col-8">
-                    <textarea asp-for="Issue.Action" class="form-control"></textarea>
+                <div class="col-10">
+                    <textarea asp-for="Issue.Action" class="form-control" type="text" value="" id="action" placeholder=" Please add your action here"></textarea>
+                    <span id='message1'></span>
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col-4">
+                <div class="col-2">
                     <label asp-for="Issue.ServiceRptno"></label>
                 </div>
-                <div class="col-8">
-                    <input asp-for="Issue.ServiceRptno" class="form-control" />
-                    <span asp-validation-for="Issue.ServiceRptno" class="text-danger"> </span>
+                <div class="col-10">
+                    <textarea asp-for="Issue.ServiceRptno" class="form-control" type="text" value="" placeholder="Please add your ServiceReport details here"></textarea>
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col-4">
+                <div class="col-2">
                     <label asp-for="Issue.Issuestatus"></label>
                 </div>
-                <div class="col-8">
+                <div class="col-4">
                     @Html.DropDownListFor(n => n.Issue.Issuestatus,
                      new SelectList(Enum.GetValues(typeof(Issue.StatusList))),
                      "Select status",
                      new { @class = "form-control" })
                     <span asp-validation-for="Issue.Issuestatus" class="text-danger"> </span>
                 </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-8 offset-4">
+                <div class="col-6">
                     @if (Model.Issue.Id != 0)
                     {
                         <partial name="_EditAndBackToListButton" model="Model.Issue.Id" />
@@ -117,8 +117,7 @@
                     {
                         <div class="row">
                             <div class="col">
-                                <button type="submit" onclick="return validateInput()" class="btn btn-primary form-control">Create</button>
-                                @*<button type="submit" class="btn btn-primary form-control">Create</button>*@
+                                <button type="submit" name="Create" id="create" class="btn btn-primary form-control"> Create</button>
                             </div>
                             <div class="col">
                                 <a asp-action="Index" class="btn btn-success form-control">Back to List</a>
@@ -127,17 +126,35 @@
                     }
                 </div>
             </div>
+
         </div>
     </div>
 </form>
 
-@section Scripts{
+@section Scripts
+{
     <partial name="_ValidationScriptsPartial" />
-    <script src="https://cdn.tiny.cloud/1/jmo53fm3j93pcwt2urxcbo3m2f95pmhrxsnni7ia1p3v9fa3/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="~/tinymce/tinymce.min.js"></script>
+    @*<script src="~/tinymce/jquery.tinymce.min.js"></script>*@
+    @*  <script src="https://cdn.tiny.cloud/1/jmo53fm3j93pcwt2urxcbo3m2f95pmhrxsnni7ia1p3v9fa3/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>*@
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    @*<script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/jquery/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>*@
+
     <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'lists',
+            menubar: 'file edit format'
+
+
+        });
         $(document).ready(function () {
             $('#CarparkID').change(function () {
                 var carparkid = $(this).val();
+
                 $.ajax({
                     type: "Post",
                     url: "/Admin/Issue/GetGantryList?CarparkID=" + carparkid,
@@ -146,45 +163,88 @@
                         $("#GantryID").empty();
                         $("#GantryID").append(response);
                     }
+
                 });
             });
-        });
-        tinymce.init({
-            selector: 'textarea',
-            plugins: 'lists',
-            menubar: 'file edit format'
+            $('#CarparkID').on('blur', function (e) {
+                var cpkdata = $(this).val();
+                //console.log(cpkdata);
+                if (cpkdata == '') {
+                    //alert(data);
+                    //$('#myModal').modal('toggle');
+                    $('#cpkmessage').html("The Carpark field is required");
+                    $("#CarparkID").focus();
+                }
+                else {
+                    $('#cpkmessage').hide();
+                }
+                //$("#CarparkList").focus();
+            });
+            $('#GantryID').on('blur', function (e) {
+                var gantrydata = $(this).val();
+                //console.log(gantrydata);
+                if (gantrydata == '') {
+                    //alert(data);
+                    //$('#myModal').modal('toggle');
+                    $('#gantrymessage').html("The Gantry field is required");
+                    $("#GantryID").focus();
+                }
+                else {
+                    $('#gantrymessage').hide();
+                }
+                //$("#CarparkList").focus();
+            });
+            tinymce.get('description').on('blur', function (e) {
+                tinyMCE.triggerSave();
+                var content = $("#description").val();
+                //console.log(content);
+                if (content == '') {
+                    $('#message').html("The Description field is required");
+                }
+                else {
+                    $('#message').hide();
+                }
+            });
+            $('#description').focusout(function () {
+                tinyMCE.triggerSave();
+                var content = $("#description").val();
+                if (content == '') {
+                    $('#message').html("The Description field is required");
+                }
+                else {
+                    $('#message').hide();
+                }
+            });
+            $('#create').on('click', function ()  {
+                tinyMCE.triggerSave();
+                var content = $("#description").val();
+                if (content == '') {
+                    $('#message').html("The Description field is required");
+                }
+                else {
+                    $('#message').hide();
+                }
+                var cpkdata = $(this).val();
+                if (cpkdata == '') {
+                    $('#cpkmessage').html("The Carpark field is required");
+                    $("#CarparkID").focus();
+                }
+                else {
+                    $('#cpkmessage').hide();
+                }
+
+                var gantrydata = $(this).val();
+                if (gantrydata == '') {
+                    $('#gantrymessage').html("The Gantry field is required");
+                    $("#GantryID").focus();
+                }
+                else {
+                    $('#gantrymessage').hide();
+                }
+            });
         });
 
-
-        //function validateInput() {
-        //    if (document.getElementById("uploadBox").value == "") {
-        //        swal("Error", "Please select an image", "error");
-        //        return false;
-        //    }
-        //    return true;
     </script>
+
 }
-
-@*<partial name="_ValidationScriptsPartial" />
-    <script src="https://cdn.tiny.cloud/1/jmo53fm3j93pcwt2urxcbo3m2f95pmhrxsnni7ia1p3v9fa3/tinymce/5/tinymce.min.js"></script>
-    <script>
-        tinymce.init({
-            selector: 'textarea',
-            plugins: 'lists',
-            menubar: 'file edit format'
-        });
-
-
-        function validateInput() {
-            if (document.getElementById("uploadBox").value == "") {
-                swal("Error", "Please select an image", "error");
-                return false;
-            }
-            return true;
-        };*@
-
-
-
-@*</script>*@
-@*}*@
 

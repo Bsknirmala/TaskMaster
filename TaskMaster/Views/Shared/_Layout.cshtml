@@ -33,56 +33,30 @@
                     {
                         <partial name="_LoginPartial" />
                     }
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="Admin" asp-controller="Issue" asp-action="Upsert">Create Issue</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="Admin" asp-controller="Issue" asp-action="Index">Manage Issues</a>
-                    </li>
-                    @if ((Context.Session.GetString("Username") != null) && (Context.Session.GetString("Role") == "Admin"))
-                    {
+                    <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">Manage Users</a>
+                            <a class="nav-link" asp-area="Admin" asp-controller="Issue" asp-action="Upsert">Create Issue</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Issue" asp-action="Index">Manage Issues</a>
+                        </li>
+                        @if ((Context.Session.GetString("Username") != null) && (Context.Session.GetString("Role") == "Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">Manage Users</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="Carpark" asp-action="Index">Carpark</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="Gantry" asp-action="Index">Gantry</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="Hardwaretype" asp-action="Index">Category</a>
-                        </li>
-                    }
-                    @*<li class="nav-item">
-            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </li>*@
-                    @*<li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Admin
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" asp-area="Admin" asp-controller="Carpark" asp-action="Index">Carpark</a>
-                <a class="dropdown-item" asp-area="Admin" asp-controller="Gantry" asp-action="Index">Gantry</a>
-                <a class="dropdown-item" asp-area="Admin" asp-controller="Hardwaretype" asp-action="Index">Category</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">Manage Users</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Carpark Issues
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" asp-area="Admin" asp-controller="Issue" asp-action="Upsert">Create Issue</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" asp-area="Admin" asp-controller="Issue" asp-action="Index">Manage Issues</a>
-            </div>
-        </li>*@
-
-                </ul>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Carpark" asp-action="Index">Carpark</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Gantry" asp-action="Index">Gantry</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Hardwaretype" asp-action="Index">Category</a>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>

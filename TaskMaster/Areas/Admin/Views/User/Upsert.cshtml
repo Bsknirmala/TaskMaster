@@ -41,11 +41,11 @@
                 <div class="col-8">
                     @if (Model.User.Id == 0)
                     {
-                        <input asp-for="User.Password" class="form-control" />
+                        <input asp-for="User.Password" id ="password" class="form-control" />
                     }
                     else
                     {
-                        <input asp-for="User.Password" class="form-control" autofocus />
+                        <input asp-for="User.Password" id="password" class="form-control" autofocus />
                     }
                     <span asp-validation-for="User.Password" class="text-danger"> </span>
                  </div>
@@ -55,9 +55,9 @@
                     <label asp-for="ConfirmPassword"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="ConfirmPassword" class="form-control" />
-                    <span asp-validation-for="ConfirmPassword" class="text-danger"> </span>
-
+                    <input asp-for="ConfirmPassword" id="confirmpassword" class="form-control" />
+                    @*<span asp-validation-for="ConfirmPassword" class="text-danger"> </span>*@
+                    <span id='message'></span>
                 </div>
             </div>
             <div class="form-group row">
@@ -113,31 +113,31 @@
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <!--<script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+
+        $('#password, #confirmpassword').on('keyup', function () {
+            if ($('#password').val() != '') {
+                if ($('#password').val() == $('#confirmpassword').val()) {
+                    $('#message').html('Password matched!').css('color', 'green');
+                } else
+                    $('#message').html('Password Mismatch').css('color', 'red');
+
+            }
+        });
         //$(document).ready(function () {
         //    $('#ConfirmPassword').change(function () {
         //        var ConfirmPassword = $(this).val();
         //        var password = $('#Password').val();
         //        if (ConfirmPassword != password)
-        //           {
-        //            toastr.error("Password mismatch!")
+        //        {
+        //            toastr.error(ConfirmPassword);
+        //            toastr.error(password);
+        //            toastr.error("Password mismatch!");
         //           }
 
         //    });
-        //});-->
-        @*$(function () {
-
-            var title = '@ViewBag.Title';
-            var message = '@ViewBag.Message';
-            if (message != "") {
-                toastr.error(message, title);
-            }
-        });*@
-        @*$("#Create").click(function(){
-            var title = '@ViewBag.Title';
-            var message = '@ViewBag.Message';
-            toastr.info(message, title);
-        });*@
-    <!--</script>-->
-}
+        //});
+    </script>
+   }
 
